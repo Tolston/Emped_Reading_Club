@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{%load static %}
+
+{% block body %}
+
+    <div class="container-fluid px-0 mx-0">
+
+			<!-- what's new, discount, trending -->
+			<div id="carousel_slide" class="carousel slide container-fluid text-center px-0" data-ride="carousel">
+				<ol class="carousel-indicators">
+					<li data-target="#carousel_slide" data-slide-to="0" class="active"></li>
+					<li data-target="#carousel_slide" data-slide-to="1"></li>
+					<li data-target="#carousel_slide" data-slide-to="2"></li>
+				</ol>
+				<div class="p-0 carousel-inner bg-success bg-gradient">
+					<div class="carousel-item active">
+						<img src="{% static 'images/carousel_1.jpg' %}" class="w-100" style="height:40vmin"/>
+					</div>
+					<div class="carousel-item">
+						<img src="{% static 'images/carousel_2.jpg' %}" class="w-100" style="height:40vmin"/>
+					</div>
+					<div class="carousel-item">
+						<img src="{% static 'images/carousel_3.jpg' %}" class="w-100" style="height:40vmin"/>
+					</div>
+				</div>
+				<a class="carousel-control-prev " href="#carousel_slide" role="button" data-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="sr-only">Previous</span>
+				</a>
+				<a class="carousel-control-next" href="#carousel_slide" role="button" data-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="sr-only">Next</span>
+				</a>
+			</div>
+
+			<div class="container-fluid px-lg-3 px-xl-3 mt-4">
+				<div class="container-fluid py-3 px-0 px-lg-4" style="box-sizing:border-box;">
+					<div class="w-100 type-header"><h1 class="custom-h1">Age</h1></div>
+					<div id="divAgeRange" class="py-3 card-holder " onscroll="btnNavigatorAble(this)">
+						<button class="book-grid-navigator book-grid-navigator-left rounded p-0" type="button" onclick="btn_grid_scroll_left(this)" >
+							<span class="mb-3 d-flex justify-content-center text-center">
+								<i class="bi bi-chevron-left" style="font-size: 7vmin;"></i>
+							</span>
+						</button>
+						<button class="book-grid-navigator book-grid-navigator-right rounded p-0" type="button" onclick="btn_grid_scroll_right(this)">
+							<span class="mb-3 d-flex justify-content-center text-center">
+								<i class="bi bi-chevron-right" style="font-size: 7vmin;"></i>
+							</span>
+						</button>
+						{% for range in agerange %}
+							<div class=" card border-0 shadow rounded mx-2 d-inline-block custom-type-card-size">
+								<a href="{{ range.get_absolute_url }}" class="text-decoration-none">
+									<img src="{{ range.Image.url }}" class="img-fluid custom-type-card-image-size">
+									<div class="text-center py-2 " style="overflow-x:hidden ;">
+										<h5 class="custom-h5" >{{ range.AgeRange }}</h5>
+									</div>
+								</a>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+
+				<div class="container-fluid py-3 px-0 px-lg-4" style="box-sizing:border-box;">
+					<div class="w-100 type-header"><h1 class="custom-h1">Genre</h1></div>
+					<div id="divGenre" class="py-3 card-holder " onscroll="btnNavigatorAble(this)">
+						<button class="book-grid-navigator book-grid-navigator-left rounded p-0" type="button" onclick="btn_grid_scroll_left(this)" >
+							<span class="mb-3 d-flex justify-content-center text-center">
+								<i class="bi bi-chevron-left" style="font-size: 7vmin;"></i>
+							</span>
+						</button>
+						<button class="book-grid-navigator book-grid-navigator-right rounded p-0" type="button" onclick="btn_grid_scroll_right(this)">
+							<span class="mb-3 d-flex justify-content-center text-center">
+								<i class="bi bi-chevron-right" style="font-size: 7vmin;"></i>
+							</span>
+						</button>
+						{% for category in genres %}
+							<div class=" card border-0 shadow rounded mx-2 d-inline-block custom-type-card-size">
+								<a href="{{ category.get_absolute_url }}" class="text-decoration-none">
+									<img src="{{ category.Image.url }}" class="img-fluid custom-type-card-image-size">
+									<div class="text-center py-2 " style="overflow-x:hidden ;">
+										<h5 class="custom-h5">{{ category.Name }}</h5>
+									</div>
+								</a>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+
+				<div class="container-fluid py-3 px-0 px-lg-4" style="box-sizing:border-box;">
+					<div class="w-100 type-header"><h1 class="custom-h1">Authors</h1></div>
+					<div id="div_author" class="py-3 card-holder " onscroll="btnNavigatorAble(this)">
+						<button class="book-grid-navigator book-grid-navigator-left rounded p-0" type="button" onclick="btn_grid_scroll_left(this)" >
+							<span class="mb-3 d-flex justify-content-center text-center">
+								<i class="bi bi-chevron-left" style="font-size: 7vmin;"></i>
+							</span>
+						</button>
+						<button class="book-grid-navigator book-grid-navigator-right rounded p-0" type="button" onclick="btn_grid_scroll_right(this)">
+							<span class="mb-3 d-flex justify-content-center text-center">
+								<i class="bi bi-chevron-right" style="font-size: 7vmin;"></i>
+							</span>
+						</button>
+						{% for author in authors %}
+							<div class=" card border-0 shadow rounded mx-2 d-inline-block custom-type-card-size" >
+								<a href="{{ author.get_absolute_url }}" class="text-decoration-none">
+									<img src="{{ author.Image.url }}" class="img-fluid custom-type-card-image-size">
+									<div class="text-center py-2" style="overflow-x:hidden ;">
+										<h5 class="custom-h5" >{{ author.Name }}</h5>
+									</div>
+								</a>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+
+			</div>
+	</div>
+{% endblock %}

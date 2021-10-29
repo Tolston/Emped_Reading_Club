@@ -1,0 +1,487 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+    <div id="div_main_profile" class="container-fluid bg-warning">
+        {% for user in customer %}
+        <div class="container-fluid row flex justify-content-between px-lg-5 py-lg-5 py-2">
+            <div class="pl-lg-5 text-light">
+                <h2 class="custom-h2">Personal Information</h2>
+            </div>
+            <div class="pl-lg-5">
+                <a href="{% url 'profile-page' %}" class="btn btn-size btn-outline-light rounded-0" >Back to Profile</a>
+            </div>
+        </div>
+        <div class="container-fluid bg-white pt-3">
+            <form id="EditForm" class="px-lg-5" method="POST">
+                {% csrf_token %}
+                <div class="form-group row  ">
+                    <div class="col-lg-2 col-md-2 col-3">
+                        <label>Phone No</label>
+                    </div>
+                    <div class="form-group col-lg-5 col-md-5 col-5 ">
+                        <input id="InputPhoneNo" type="text" class="form-control basic-font-size" placeholder="Enter the phone number here" value="{{user.PhoneNo}}" onkeyup="btn_enable('{{user.PhoneNo}}',this.value)"/>
+                        <div id="InputPhoneNo_validation_msg" class=" text-align-center error-msg d-none basic-font-size">Please Enter Phone number in valid format Ex: XXXXXXXXXX</div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-4">
+                        <button id="BtnSendOtp" type="button" class="btn btn-size btn-saffron form-control" onclick="UpdateSendOTP()">Send OTP</button>
+                    </div>
+                </div>
+                <div id="DivOTPBlock" class="form-group row py-1 d-none">
+                    <div class="col-lg-2 col-md-2 col-3">
+                        <label for="InputOTP">OTP</label>
+                    </div>
+                    <div class="form-group col-lg-5 col-md-5 col-5">
+                        <input id="InputOTP" type="text" class="form-control basic-font-size" placeholder="Enter the OTP here"/>
+                        <div id="InputOTP_validation_msg" class=" text-align-center error-msg d-none basic-font-size">Incorrect OTP!!!</div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-4">
+                        <button id="BtnVerify" type="button" class="btn btn-size btn-saffron form-control" onclick="VerifyOTP()">Verify</button>
+                    </div>
+                </div>
+                <div class="form-group row  py-1">
+                    <div class="col-lg-2 col-md-2 col-2">
+                        <label>Name</label>
+                    </div>
+                    <div class="form-group col-lg-5 col-md-5 col-5">
+                        <input id="InputFirstName" type="text" class="form-control basic-font-size" placeholder="First Name" value="{{user.FirstName}}" onkeyup="btn_enable('{{user.FirstName}}',this.value)"/>
+                        <div id="InputFirstName_validation_msg" class=" text-align-center error-msg d-none">Oops Sorry!!! First Name Cannot be empty</div>
+                    </div>
+                    <div class="form-group col-lg-5 col-md-5 col-5">
+                        <input id="InputLastName" type="text" class="form-control basic-font-size" placeholder="Last Name" value="{{user.LastName}}" onkeyup="btn_enable('{{user.LastName}}',this.value)"/>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-row flex justify-content-center container-fluid bg-white py-1">
+                    <div class="form-group col-lg-4 col-md-4 col-4">
+                        <input type="button" id="btn_submit" class="btn btn-size btn-saffron form-control" value="Submit" onclick="updateInfo()" disabled/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="container-fluid bg-white mt-3 py-3">
+            <div class="px-lg-3">
+                <nav>
+                    <div class="row d-flex justify-content-between " >
+                        <div class="col-lg-10 col-md-10 col-7 text-saffron" style="border-bottom:1px solid #fc8019;">
+                            <h3 class="custom-h3 ">Address</h3>
+                        </div>
+                        <div class="nav nav-tabs col-lg-2 col-md-2 col-5 outline-saffron" id="nav-tab" role="tablist">
+                            <a class="nav-link active basic-font-size"  id="nav-edit-tab" data-toggle="tab" href="#nav-edit" role="tab" aria-controls="nav-edit" aria-selected="false">Edit</a>
+                            <a class="nav-link basic-font-size" id="nav-add-tab" data-toggle="tab" href="#nav-add" role="tab" aria-controls="nav-contact" aria-selected="false">Add</a>
+                        </div>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-edit" role="tabpanel" aria-labelledby="nav-edit-tab">
+                        <div id="div_showAddress" class="">
+                            <div class="row row-cols-lg-1">
+                                <div class="col mb-4">
+                                    {% for addr in address %}
+                                        {% if addr.IsDefault %}
+                                            <div class="card outline-saffron m-1">
+                                                <div class="card-header outline-saffron custom-h5 font-weight-bold">Default Address</div>
+                                        {% else %}
+                                            <div class="card border-dark m-1">
+                                                <div class="card-header border-secondary h5">Secondary Address</div>
+                                        {% endif %}
+                                                <ul class="list-group list-group-flush border-0">
+                                                    <li class="list-group-item">Door : <span id="spandoor{{addr.id}}">{{addr.DoorNo}}</span></li>
+                                                    <li class="list-group-item">Address: <span id="spanaddress{{addr.id}}">{{addr.Address}}</span></li>
+                                                    <li class="list-group-item">Pincode: <span id="spanPinCode{{addr.id}}">{{addr.PinCode}}</span></li>
+                                                    <li class="list-group-item">Landmark: <span id="spanlandmark{{addr.id}}">{{addr.LandMark}}</span></li>
+                                                </ul>
+                                                <div class="card-footer bg-transparent text-center p-2">
+                                                    <button id="btnEdit{{addr.id}}" type="button" class="btn btn-size btn-saffron" onclick="editAddress({{addr.id}})">Edit</button>
+                                                    {% if addr.IsDefault == False %}
+                                                        <button id="btnDefault{{addr.id}}" type="button" class="btn btn-size btn-sm btn-saffron" onclick="updateDefaultAddress({{addr.id}})">Make Default</button>
+                                                        <button id="btnDelete{{addr.id}}" type="button" class="btn btn-size btn-sm btn-saffron" onclick="deleteAddress({{addr.id}})">Delete</button>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div id="div_Edit_form" class="d-none py-3">
+                            <form id="EditAddressForm" method="POST">
+                                <input id="addr" type="hidden" value=""/>
+                                <div class="form-group row py-1">
+                                    <div class="col-lg-2 col-md-2 col-3">
+                                        <label>Door No</label>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-4 col-4">
+                                        <input id="InputDoorNo" type="text" class="form-control basic-font-size" placeholder="Door No"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row py-1">
+                                    <div class="col-lg-2 col-md-2 col-3">
+                                        <label>Address</label>
+                                    </div>
+                                    <div class="form-group col-lg-10 col-md-10 col-9">
+                                        <input id="InputAddress" type="text" class="form-control basic-font-size" placeholder="Enter your address here" />
+                                        <div id="InputAddress_validation_msg" class=" text-align-center error-msg d-none basic-font-size">Oops Sorry!!! Address cannot be empty</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row py-1">
+                                    <div class="col-lg-2 col-md-2 col-3">
+                                        <label>Pin code</label>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-4 col-4">
+                                        <input id="InputPinCode" type="text" class="form-control basic-font-size" placeholder="Pin code"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row py-1">
+                                    <div class="col-lg-2 col-md-2 col-3">
+                                        <label>Landmark</label>
+                                    </div>
+                                    <div class="form-group col-lg-10 col-m-10 col-9">
+                                        <input id="InputLandmark" type="text" class="form-control basic-font-size" placeholder="Enter your landmark here" />
+                                    </div>
+                                </div>
+                                <div class="form-row flex justify-content-center container-fluid bg-white py-1">
+                                    <div class="form-group col-lg-8 col-md-8 col-8 text-center">
+                                        <button type="button" class="btn btn-size btn-md btn-saffron" onclick="updateAddress()">Save</button>
+                                        <button type="button" class="btn btn-size btn-md btn-saffron" onclick="cancelEditAddressForm()">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-add" role="tabpanel" aria-labelledby="nav-add-tab">
+                        <form id="addAddressForm" class="py-3" method="POST">
+                            <div class="form-group row py-1">
+                                <div class="col-lg-2 col-md-2 col-3">
+                                    <label>Door No</label>
+                                </div>
+                                <div class="form-group col-lg-4 col-md-4 col-4">
+                                    <input id="InputAddDoorNo" type="text" class="form-control basic-font-size" placeholder="Door No"/>
+                                </div>
+                            </div>
+                            <div class="form-group row py-1">
+                                <div class="col-lg-2 col-md-2 col-3">
+                                    <label>Address</label>
+                                </div>
+                                <div class="form-group col-lg-10 col-md-10 col-9">
+                                    <input id="InputAddAddress" type="text" class="form-control basic-font-size" placeholder="Enter your address here" />
+                                    <div id="InputAddAddress_validation_msg" class=" text-align-center error-msg d-none basic-font-size">Oops Sorry!!! Address cannot be empty</div>
+                                </div>
+                            </div>
+                            <div class="form-group row py-1">
+                                <div class="col-lg-2 col-md-2 col-3">
+                                    <label>Pin code</label>
+                                </div>
+                                <div class="form-group col-lg-4 col-md-4 col-4">
+                                    <input id="InputAddPinCode" type="text" class="form-control basic-font-size" placeholder="Pin code"/>
+                                    <div id="InputAddPinCode_validation_msg" class=" text-align-center error-msg d-none basic-font-size">Oops Sorry!!! Pin code is either empty or not in correct format</div>
+                                </div>
+                            </div>
+                            <div class="form-group row py-1">
+                                <div class="col-lg-2 col-md-2 col-3">
+                                    <label>Landmark</label>
+                                </div>
+                                <div class="form-group col-lg-10 col-m-10 col-9">
+                                    <input id="InputAddLandmark" type="text" class="form-control basic-font-size" placeholder="Enter your landmark here" />
+                                </div>
+                            </div>
+                            <div class="form-row flex justify-content-center container-fluid bg-white py-1">
+                                <div class="form-group col-lg-4 col-md-4 col-4 text-center">
+                                    <button type="button" class="btn btn-size btn-saffron form-control " onclick="addAddress()">Add</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        {% endfor %}
+    </div>
+
+
+    <script type="text/javascript">
+        var regex = /^\d{10}$/;
+        var InputPhoneNo = document.getElementById("InputPhoneNo");
+        var InputOTP = document.getElementById("InputOTP");
+        var InputFirstName = document.getElementById("InputFirstName");
+        var InputLastName = document.getElementById("InputLastName");
+        var otp_result = "";
+
+        function btn_enable(value1, value2){
+            if(value1 != value2){
+                document.getElementById("btn_submit").disabled=false;
+            }
+            else{
+                document.getElementById("btn_submit").disabled=true;
+            }
+        }
+
+        function UpdateSendOTP(){
+            if(!InputPhoneNo.value.match(regex))
+            {
+                document.getElementById("InputPhoneNo_validation_msg").innerHTML="Please Enter Phone number in valid format Ex: XXXXXXXXXX";
+                document.getElementById("InputPhoneNo_validation_msg").classList.remove("d-none");
+                InputPhoneNo.classList.add("textbox-error");
+            }
+            else{
+                document.getElementById("InputPhoneNo_validation_msg").classList.add("d-none");
+                InputPhoneNo.classList.remove("textbox-error");
+                var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+				$.ajax({
+					url: "{% url 'otp' %}",
+					headers: {'X-CSRFToken': csrftoken },
+					type: "POST",
+					dataType:'html',
+					data: {
+					        'type': 'update',
+							'Phoneno': InputPhoneNo.value,
+					},
+					success: function (response){
+					    if(response == "success"){
+					        document.getElementById("DivOTPBlock").classList.remove("d-none");
+							document.getElementById("toast_body").innerHTML="OTP Sent!!!";
+							$('#divAlert').toast('show');
+						}
+						else if(response == "exists"){
+						    document.getElementById("InputPhoneNo_validation_msg").innerHTML="Customer already exists with this number!!!";
+						    document.getElementById("InputPhoneNo_validation_msg").classList.remove("d-none");
+                            InputPhoneNo.classList.add("textbox-error");
+						}
+						else{
+						    document.getElementById("InputPhoneNo_validation_msg").innerHTML="Mobile number invalid!!!";
+						    document.getElementById("InputPhoneNo_validation_msg").classList.remove("d-none");
+                            InputPhoneNo.classList.add("textbox-error");
+						}
+					}
+				});
+            }
+        }
+        function VerifyOTP(){
+            if(InputOTP.value=="" && Number(InputOTP.value) == NaN){
+                document.getElementById("InputOTP_validation_msg").classList.remove("d-none");
+                InputOTP.classList.add("textbox-error");
+            }
+            else{
+                document.getElementById("InputOTP_validation_msg").classList.add("d-none");
+                InputOTP.classList.remove("textbox-error");
+                 var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+				$.ajax({
+					url: "{% url 'otp_verify' %}",
+					headers: {'X-CSRFToken': csrftoken },
+					type: "POST",
+					dataType:'html',
+					data: {
+					        'type': 'update',
+							'Phoneno': InputPhoneNo.value,
+							'OTP': InputOTP.value,
+					},
+					success: function (response){
+					    if(response == "match"){
+                            document.getElementById("DivOTPBlock").classList.add("d-none");
+                            otp_result = response;
+                        }
+                        else{
+                            document.getElementById("InputOTP_validation_msg").classList.remove("d-none");
+                            InputOTP.classList.add("textbox-error");
+                        }
+                    }
+                });
+            }
+        }
+        function updateInfo(){
+            if(!InputPhoneNo.value.match(regex) || InputPhoneNo.value=="" || InputFirstName.value=="" || otp_result == "no match"){
+                if(!InputPhoneNo.value.match(regex) || InputPhoneNo.value==""){
+                    document.getElementById("InputPhoneNo_validation_msg").classList.remove("d-none");
+                    InputPhoneNo.classList.add("textbox-error");
+                }
+                if(InputFirstName.value==""){
+                    document.getElementById("InputFirstName_validation_msg").classList.remove("d-none");
+                    InputFirstName.classList.add("textbox-error");
+                }
+                if(otp_result == "no match"){
+                    document.getElementById("InputPhoneNo_validation_msg").innerHTML = "Mobile number not verified";
+                    document.getElementById("InputPhoneNo_validation_msg").classList.remove("d-none");
+                    InputPhoneNo.classList.add("textbox-error");
+                }
+            }
+            else if(InitialPhoneNo != InputPhoneNo.value && otp_result == ""){
+                alert(InitialPhoneNo);
+                document.getElementById("InputPhoneNo_validation_msg").innerHTML = "Mobile number not verified";
+                document.getElementById("InputPhoneNo_validation_msg").classList.remove("d-none");
+                InputPhoneNo.classList.add("textbox-error");
+            }
+            else{
+                document.getElementById("InputPhoneNo_validation_msg").classList.add("d-none");
+                document.getElementById("InputFirstName_validation_msg").classList.add("d-none");
+                InputPhoneNo.classList.remove("textbox-error");
+                InputFirstName.classList.remove("textbox-error");
+                var number=document.getElementById("InputPhoneNo");
+                var FirstName=document.getElementById("InputFirstName");
+                var LastName=document.getElementById("InputLastName");
+                var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                $.ajax({
+                    url: "{% url 'update' %}",
+                    headers: {'X-CSRFToken': csrftoken },
+                    type: "POST",
+					dataType:'html',
+					data: {
+					        'OTP': otp_result,
+							'PhoneNo': number.value,
+							'FirstName': FirstName.value,
+							'LastName': LastName.value,
+					},
+					success: function (response){
+								if(response == 'success'){
+								    alert('success');
+								    window.location.href = "{{ user.get_absolute_url }}";
+								}
+				    }
+                });
+            }
+        }
+
+        function updateDefaultAddress(address){
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            $.ajax({
+                url : "{% url 'defaultAddress' %}",
+                headers: {'X-CSRFToken': csrftoken },
+                type: "POST",
+                datatype: 'html',
+                data: {
+                    'Address':address,
+                },
+                success: function(response){
+                    if(response == 'success'){
+                        {% for user in customer %}
+                            window.location.href="{{ user.get_absolute_url }}";
+                        {% endfor %}
+                    }
+                }
+            });
+        }
+
+        function deleteAddress(address){
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            $.ajax({
+                url: "{% url 'deleteAddress' %}",
+                headers: { 'X-CSRFToken': csrftoken },
+                type: "POST",
+                datatype: 'html',
+                data: {
+                    'Address': address,
+                },
+                success: function(response){
+                    if(response=="success"){
+                        {% for user in customer %}
+                            window.location.href = "{{user.get_absolute_url}}";
+                        {% endfor %}
+                    }
+                }
+            });
+        }
+
+        function editAddress(address){
+            document.getElementById("InputDoorNo").value = document.getElementById("spandoor"+address).innerHTML;
+            document.getElementById("InputAddress").value = document.getElementById("spanaddress"+address).innerHTML;
+            document.getElementById("InputPinCode").value = document.getElementById("spanPinCode"+address).innerHTML;
+            document.getElementById("InputLandmark").value = document.getElementById("spanlandmark"+address).innerHTML;
+            document.getElementById("addr").value = address;
+            document.getElementById("div_showAddress").classList.add("d-none");
+            document.getElementById("div_Edit_form").classList.remove("d-none");
+            document.getElementById("addr").value=address;
+        }
+
+        function cancelEditAddressForm(){
+            document.getElementById("div_showAddress").classList.remove("d-none");
+            document.getElementById("div_Edit_form").classList.add("d-none");
+        }
+
+        function updateAddress(){
+            var addr = document.getElementById("addr").value;
+            var doorNo = document.getElementById("InputDoorNo").value;
+            var landmark = document.getElementById("InputLandmark").value;
+            var pinCode = document.getElementById("InputPinCode").value;
+            var address_value = document.getElementById("InputAddress");
+            var address_validation =  document.getElementById("InputAddress_validation_msg");
+            if(address_value==""){
+                address_value.classList.add("textbox-error");
+                address_validation.classList.remove("d-none");
+            }
+            else{
+                address_value.classList.remove("textbox-error");
+                address_validation.classList.add("d-none");
+                var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                $.ajax({
+                    url: "{% url 'edit_address' %}",
+                    headers: { 'X-CSRFToken' : csrftoken },
+                    type: "POST",
+                    datatype: 'html',
+                    data: {
+                        'value': addr,
+                        'doorNo': doorNo,
+                        'address': address_value.value,
+                        'pinCode':pinCode,
+                        'landmark': landmark,
+                    },
+                    success: function(response){
+                        if(response=="success"){
+                            {% for user in customer %}
+                                window.location.href = "{{user.get_absolute_url}}";
+                            {% endfor %}
+                        }
+                    }
+                });
+            }
+        }
+
+        function addAddress()
+        {
+            var door_No = document.getElementById("InputAddDoorNo").value;
+            var land_mark = document.getElementById("InputAddLandmark").value;
+            var new_address = document.getElementById("InputAddAddress");
+            var pin_code = document.getElementById("InputAddPinCode");
+            var address_validation =  document.getElementById("InputAddAddress_validation_msg");
+            var pin_code_validation = document.getElementById("InputAddPinCode_validation_msg");
+            var regex = /^[1-9]{1}[0-9]{5}$/;
+            if(new_address.value == "" || pin_code.value == "" || !pin_code.value.match(regex)){
+                if(new_address.value == ""){
+                    new_address.classList.add("textbox-error");
+                    address_validation.classList.remove("d-none");
+                }
+                if(pin_code.value == "" || !pin_code.value.match(regex)){
+                    pin_code.classList.add("textbox-error");
+                    pin_code_validation.classList.remove("d-none");
+                }
+            }
+            else{
+                new_address.classList.remove("textbox-error");
+                address_validation.classList.add("d-none");
+                pin_code.classList.remove("textbox-error");
+                pin_code_validation.classList.add("d-none");
+                var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                $.ajax({
+                    url: "{% url 'add_address' %}",
+                    headers: { 'X-CSRFToken' : csrftoken },
+                    type: "POST",
+                    datatype: 'html',
+                    data: {
+                        'doorNo': door_No,
+                        'address': new_address.value,
+                        'pinCode':pin_code.value,
+                        'landmark': land_mark,
+                    },
+                    success: function(response){
+                        if(response=="success"){
+                            {% for user in customer %}
+                                window.location.href = "{{user.get_absolute_url}}";
+                            {% endfor %}
+                        }
+                    }
+                });
+            }
+        }
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="px-lg-5 my-3">
+            {% if is_present %}
+                {% if match == "same match" %}
+                    <h1 class="custom-h1 my-3">Search Results for {{search_text}}</h1>
+                    <div class=" my-3 py-4">
+                        <div class="w-100 type-header"><h1 class="custom-h1">{{category}}</h1></div>
+                        {% for record in result %}
+                            <div class=" card border-0 shadow rounded mx-2 my-3 d-inline-block custom-type-card-size"  >
+                                <a href="{{ record.get_absolute_url }}" class="text-decoration-none" >
+                                    <img src="{{ record.Image.url }}" class="img-fluid custom-type-card-image-size">
+                                    <div class="text-center py-2" style="white-space:nowrap;">
+                                        <h5 class="custom-h5" >{{ record.Name|slice:":21" }}</h5></div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% elif match == "different match" %}
+                    <h1 class="custom-h1 my-3">Oops!!!! Could not find {{search_text}}:(</h1>
+                    <div class=" my-3 py-4">
+                        <div class="w-100 type-header"><h1 class="custom-h1">{{category}} you might like</h1></div>
+                        {% for record in result %}
+                            <div class=" card border-0 shadow rounded mx-2 my-3 d-inline-block custom-type-card-size" >
+                                <a href="{{ record.get_absolute_url }}" class="text-decoration-none">
+                                    <img src="{{ record.Image.url }}" class="img-fluid custom-type-card-image-size">
+                                    <div class="text-center py-2 basic-font-size" style="overflow-x:hidden ;">
+                                        <h5 class="custom-h5" >{{ record.Name }}</h5></div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h1 class="custom-h1 my-3">Search Results for {{search_text}}</h1>
+                    <div class="my-3 py-4">
+                        {% if is_book_present %}
+                            <div class="w-100 type-header"><h1 class="custom-h1">Books</h1></div>
+                            {% for book in result_book %}
+                                <div class=" card border-0 shadow rounded mx-2 my-3 d-inline-block custom-type-card-size" >
+                                    <a href="{{ book.get_absolute_url }}" class="text-decoration-none">
+                                        <img src="{{ book.Image.url }}" class="img-fluid custom-type-card-image-size">
+                                        <div class="text-center py-2 basic-font-size" style="overflow-x:hidden ;">
+                                            <h5 class="custom-h5" >{{ book.Name }}</h5></div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if is_author_present %}
+                            <div class="w-100 type-header"><h1 class="custom-h1">Authors</h1></div>
+                            {% for author in result_author %}
+                                <div class=" card border-0 shadow rounded mx-2 my-3 d-inline-block custom-type-card-size" >
+                                    <a href="{{ author.get_absolute_url }}" class="text-decoration-none">
+                                        <img src="{{ author.Image.url }}" class="img-fluid custom-type-card-image-size">
+                                        <div class="text-center py-2 basic-font-size" style="overflow-x:hidden ;">
+                                            <h5 class="custom-h5" >{{ author.Name }}</h5></div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if is_genre_present %}
+                            <div class="w-100 type-header"><h1 class="custom-h1">Genres</h1></div>
+                            {% for genre in result_genre %}
+                                <div class=" card border-0 shadow rounded mx-2 my-3 d-inline-block custom-type-card-size" >
+                                    <a href="{{ genre.get_absolute_url }}" class="text-decoration-none">
+                                        <img src="{{ genre.Image.url }}" class="img-fluid custom-type-card-image-size">
+                                        <div class="text-center py-2 basic-font-size" style="overflow-x:hidden ;">
+                                            <h5 class="custom-h5" >{{ genre.Name }}</h5></div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="align-self-center">
+                    <h1 class="custom-h1">"Oops! sorry not found!</h1>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

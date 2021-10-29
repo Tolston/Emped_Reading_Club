@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    {% for category in genre %}
+        <div class="container-fluid py-3 px-0 px-lg-4" style="box-sizing:border-box;">
+            <div class="w-100 type-header my-4 "><h1 class="text-center">{{category.Name}}</h1></div>
+            <div class="" style="overflow:hidden">
+                {% for book in books %}
+<!--                    <a href="{{ book.get_absolute_url }}" class="custom-card shadow-md card mx-lg-3 mx-1 my-4 mt-3 float-left">-->
+<!--                        <img src="{{ book.Image.url }} " class="book-title-image">-->
+<!--                        <div class="tile-title card-title text-center "><h5>{{ book.Name }}</h5></div>-->
+<!--                    </a>-->
+                    <div class=" card border-0 shadow rounded mx-2 my-3 d-inline-block custom-type-card-size" >
+                        <a href="{{ book.get_absolute_url }}" class="text-decoration-none">
+                            <img src="{{ book.Image.url }}" class="img-fluid custom-type-card-image-size">
+                            <div class="text-center py-2 basic-font-size" style="overflow-x:hidden ;">
+                                <h5 class="custom-h5" >{{ book.Name }}</h5>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,349 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <div id="div_main_profile" class="container-fluid bg-warning">
+        <div class="container-fluid row flex justify-content-between py-lg-4 py-2">
+            <div class="pl-lg-5 text-light">
+                <h2 class="custom-h2">Your Reading List</h2>
+            </div>
+            <div class="pl-lg-5 pt-lg-3 pt-md-3">
+                <a href="#" class="btn btn-outline-light rounded-0 basic-font-size">Wishlist</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-9 pr-0 pr-md-3 pr-lg-4 pl-1 pl-md-3 pl-lg-4">
+                <form id="BuyForm" method="POST">
+                    {% csrf_token %}
+                    <div class="container-fluid bg-white py-lg-3 py-md-3 p-lg-3 p-md-3 px-2 py-1">
+                        {% if available %}
+                            <div class="row py-0 text-saffron">
+                                <div class="px-lg-5 px-md-5 px-0 col-lg-5 col-md-5 col-5 d-flex justify-content-center">
+                                    <h3 class="custom-h3"> Your Items</h3>
+                                </div>
+                                <div class="px-lg-5 px-md-5 px-0 col-lg-7 col-md-7 col-7 d-flex justify-content-center">
+                                    <h3 class="custom-h3"> Price</h3>
+                                </div>
+                            </div>
+                            <hr class="my-lg-2 my-md-2 my-1">
+                            <div class="pb-3">
+                                {% for items in cart %}
+                                    <div id="divItems{{items.id}}" class="row container-fluid pt-2  p-lg-5 p-md-5 p-0">
+                                        <div class="col-lg-2 col-md-2 col-3 ">
+                                            <img src="{{items.Book.Image.url}}" class="img-fluid" style="width:10vmin; height:14vmin;" />
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-2">
+                                            <div class="row">
+                                                <a href="{{items.Book.get_absolute_url}}" class="cart_book_title text-sm text-dark font-weight-bold" style="font-size:1.8vmin;">{{items.Book.Name}}</a>
+                                            </div>
+                                            <div class="row">
+                                                <p class="text-success " style="font-size:2vmin;">{{items.Book.Status}}</p>
+                                            </div>
+                                            <div class="row">
+                                                <a id="btnRemove{{items.id}}" class="text-saffron pr-lg-2 pr-md-2 " href="#" onclick="removeItem({{items.id}})" style="font-size:1.8vmin;">Remove</a>
+                                                <div class="border-right d-xl-block d-lg-block d-md-block d-sm-none"></div>
+                                                <a id="btnSaveForLater{{items.id}}" class="text-saffron pl-lg-2 pl-md-2 text-decoration-underline" href="#" onclick="SaveForLateItem({{items.id}})" style="font-size:1.8vmin;">Save for Later</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-7 col-md-7 col-7 d-flex align-items-center">
+                                            <ol class="timeline w-100  p-0">
+                                                <li data-year="1 Week" data-text="&#8377;{{items.Book.Price1}}"></li>
+                                                <li data-year="2 Weeks" data-text="&#8377;{{items.Book.Price2}}"></li>
+                                                <li data-year="3 Weeks" data-text="&#8377;{{items.Book.Price3}}"></li>
+                                                <li data-year="4 Weeks" data-text="&#8377;{{items.Book.Price4}}"></li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                    <div id="divDivider{{items.id}}" class="row pt-lg-3 pt-md-3 pt-3 mx-0" style="width:100%">
+                                        <span class="border-bottom px-0 mx-0" style="width:100%"></span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <h1 class="custom-h1"> No items added to cart</h1>
+                        {% endif %}
+                    </div>
+                </form>
+                {% if saveforlater_available %}
+                    <form id="SaveForLaterBuyForm" class="py-3" method="POST">
+                        {% csrf_token %}
+                        <div class="container-fluid bg-white py-lg-3 py-md-3 p-lg-3 p-md-3 px-2 py-1">
+                            <div class="row py-0 text-saffron">
+                                <div class="px-lg-5 px-md-5 px-0 col-lg-5 col-md-5 col-5 d-flex justify-content-center">
+                                    <h3 class="custom-h3"> Save For Later</h3>
+                                </div>
+                                <div class="px-lg-5 px-md-5 px-0 col-lg-7 col-md-7 col-7 d-flex justify-content-center">
+                                    <h3 class="custom-h3"> Price</h3>
+                                </div>
+                            </div>
+                            <hr class="my-lg-2 my-md-2 my-1">
+                            <div class="pb-3">
+                                {% for save_for_later_items in saveforlater_items %}
+                                    <div id="divItems{{save_for_later_items.id}}" class="row container-fluid pt-2  p-lg-5 p-md-5 p-0">
+                                        <div class="col-lg-2 col-md-2 col-3 ">
+                                            <img src="{{save_for_later_items.Book.Image.url}}" class="img-fluid" style="width:10vmin; height:14vmin;" />
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-2">
+                                            <div class="row">
+                                                <a href="{{save_for_later_items.Book.get_absolute_url}}" class="cart_book_title text-sm text-dark font-weight-bold" style="font-size:1.8vmin;">{{save_for_later_items.Book.Name}}</a>
+                                            </div>
+                                            <div class="row">
+                                                <p class="text-success " style="font-size:2vmin;">{{save_for_later_items.Book.Status}}</p>
+                                            </div>
+                                            <div class="row">
+                                                <a id="btnRemove{{save_for_later_items.id}}" class="text-saffron pr-lg-2 pr-md-2" href="#" onclick="removeItem({{save_for_later_items.id}})" style="font-size:1.8vmin;">Remove</a>
+                                                <div class="border-right d-xl-block d-lg-block d-md-block d-sm-none"></div>
+                                                <a id="btnMoveToCart{{save_for_later_items.id}}" class="text-saffron pl-lg-2 pl-md-2 text-decoration-underline" href="#" onclick="moveToCartItem({{save_for_later_items.id}})" style="font-size:1.8vmin;">Move To Cart</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-7 col-md-7 col-7 d-flex align-items-center">
+                                            <ol class="timeline w-100 p-0">
+                                                <li data-year="1 Week" data-text="&#8377;{{save_for_later_items.Book.Price1}}"></li>
+                                                <li data-year="2 Weeks" data-text="&#8377;{{save_for_later_items.Book.Price2}}"></li>
+                                                <li data-year="3 Weeks" data-text="&#8377;{{save_for_later_items.Book.Price3}}"></li>
+                                                <li data-year="4 Weeks" data-text="&#8377;{{save_for_later_items.Book.Price4}}"></li>
+                                            </ol>
+                                        </div >
+                                    </div>
+                                    <div id="divDivider{{save_for_later_items.id}}" class="row pt-lg-3 pt-md-3 pt-3 mx-0" style="width:100%">
+                                        <span class="border-bottom px-0 mx-0" style="width:100%"></span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+            <div class="col-lg-3 col-md-3 col-3 pr-lg-3 pr-md-3 pr-0 pl-1">
+                <div class="container-fluid bg-white px-1">
+                    <div class="row flex justify-content-center pt-2">
+                        <span class="custom-h4 text-saffron font-weight-bold">Booking Details</span>
+                    </div>
+                    <hr class="my-lg-2 my-md-2 my-1 outline-saffron">
+                    <div class="row px-3 px-md-4">
+                        <span class="font-weight-bold">Items:&nbsp;</span>
+                    </div>
+                    <div class="row px-3 px-md-5">
+                            {% if available %}
+                                {% for items in cart %}
+                                    <div class="text-sm">1 x {{items.Book.Name}};</div>
+                                {% endfor %}
+                            {% endif %}
+                    </div>
+                    <br>
+                    <div class="row px-3 px-md-4">
+                        <span class="font-weight-bold">Address:&nbsp;</span>
+                    </div>
+                    <div id="divSummary" class="row px-3 px-md-5">
+                            {% for addr in address %}
+                                {% if addr.IsDefault %}
+                                    <input type="hidden" id="inputAddressValue" value="{{addr.id}}" />
+                                    <div id="divDoorNo" class="text-sm">{{addr.DoorNo}}</div>
+                                    <div id="divAddress" class="text-sm">{{addr.Address}}</div>
+                                    <div id="divLandMark" class="text-sm">{{addr.LandMark}}</div>
+                                {% endif %}
+                            {% endfor %}
+                    </div>
+                    <div class="row px-3 px-md-5">
+                        <a href="#" class="saffron-link" data-toggle="modal" data-target="#changeAddressModal">change</a>
+                    </div>
+                    <hr class="my-lg-2 my-md-2 my-1 outline-saffron">
+                    <div class="row flex justify-content-center pt-2">
+                        <button class="btn p-1 btn-checkout btn-saffron basic-font-size" onclick="Order()">Rent Books</button>
+                    </div>
+                    <div class="row flex justify-content-start pt-3 px-3 px-md-5">
+                        <p><b>Note<sup>*</sup>:</b> Payment of order placed would be made during the return of the book</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="changeAddressModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0">
+              <div class="modal-header bg-saffron">
+                <h5 class="modal-title" id="staticBackdropLabel">Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" style="color:#FFF;">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  {% for addr in address %}
+                      <label for="rbtn{{addr.id}}" class="rbtn w-100 my-2 input-group py-2 ">
+                            <div class="input-group-prepend col-1">
+                                <div class="input-group-text bg-transparent border-0 ">
+                                    {% if addr.IsDefault %}
+                                        <input type="radio" id="rbtn{{addr.id}}" class="" name="AddressRadioButton" value="{{addr.id}}" checked/>
+                                    {% else %}
+                                        <input type="radio" id="rbtn{{addr.id}}" class="" name="AddressRadioButton" value="{{addr.id}}" />
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <table class="col-10 ">
+                                <tr class="row flex justify-content-start py-1">
+                                    <th>Door no: </th>
+                                    <td id="tdDoorNo{{addr.id}}">{{addr.DoorNo}}</td>
+                                </tr>
+                                <tr class="row flex justify-content-start py-1">
+                                    <th>Address: </th>
+                                    <td id="tdAddress{{addr.id}}">{{addr.Address}}</td>
+                                </tr>
+                                <tr class="row flex justify-content-start py-1">
+                                    <th>Landmark: </th>
+                                    <td id="tdLandMark{{addr.id}}">{{addr.LandMark}}</td>
+                                </tr>
+                            </table>
+                      </label>
+                  {% endfor %}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-saffron" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-saffron" data-dismiss="modal" onclick="updateOrderAddress()">Change Address</button>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="position-fixed p-3 " style="z-index: 10000000; right: 0; top: 0;">
+        <div id="divAlert" class="toast hide" style="opacity:100%" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000" >
+            <div class="toast-header cart-alert-toast-header">
+                <strong class="mr-auto ">Alert</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="divAlertMsg" class="toast-body cart-alert-toast-body"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var address_value;
+
+        $(window).on('load',function(){
+            address_value=document.getElementById("inputAddressValue").value;
+        });
+
+        function removeItem(val){
+            var divItems = document.getElementById("divItems"+val);
+            var divDivider = document.getElementById("divDivider"+val);
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                $.ajax({
+                    url: "{% url 'removeItem' %}",
+                    headers: {'X-CSRFToken': csrftoken },
+                    type: "POST",
+					dataType:'html',
+					data: {
+							'id': val,
+					},
+					success: function (response){
+								if(response == 'success'){
+								    divItems.innerHTML="";
+                                    divItems.remove();
+                                    divDivider.innerHTML="";
+                                    divDivider.remove();
+                                    window.location.href="{% url 'cart' %}";
+								}
+				    }
+                });
+        }
+
+        function SaveForLateItem(val){
+            var divItems = document.getElementById("divItems"+val);
+            var divDivider = document.getElementById("divDivider"+val);
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                $.ajax({
+                    url: "{% url 'saveForLater' %}",
+                    headers: {'X-CSRFToken': csrftoken },
+                    type: "POST",
+					dataType:'html',
+					data: {
+							'id': val,
+					},
+					success: function (response){
+								if(response == 'success'){
+								    divItems.innerHTML="";
+                                    divItems.remove();
+                                    divDivider.innerHTML="";
+                                    divDivider.remove();
+                                    window.location.href="{% url 'cart' %}";
+								}
+				    }
+                });
+        }
+
+        function moveToCartItem(val){
+            var divItems = document.getElementById("divItems"+val);
+            var divDivider = document.getElementById("divDivider"+val);
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                $.ajax({
+                    url: "{% url 'moveToCart' %}",
+                    headers: {'X-CSRFToken': csrftoken },
+                    type: "POST",
+					dataType:'html',
+					data: {
+							'id': val,
+					},
+					success: function (response){
+								if(response == 'success'){
+								    divItems.innerHTML="";
+                                    divItems.remove();
+                                    divDivider.innerHTML="";
+                                    divDivider.remove();
+                                    window.location.href="{% url 'cart' %}";
+								}
+				    }
+                });
+        }
+        function updateOrderAddress(){
+            var ele = document.getElementsByName("AddressRadioButton");
+            for(i=0; i<ele.length; i++){
+                if(ele[i].checked){
+                    address_value=ele[i].value;
+                }
+            }
+            document.getElementById("divDoorNo").innerHTML=document.getElementById("tdDoorNo"+address_value).innerHTML;
+            document.getElementById("divAddress").innerHTML=document.getElementById("tdAddress"+address_value).innerHTML;
+            document.getElementById("divLandMark").innerHTML=document.getElementById("tdLandMark"+address_value).innerHTML;
+        }
+
+        var allProductsAvailable="True";
+        var notAvailableProduct="";
+
+        function Order()
+        {
+            {% for item in cart %}
+                {% if item.Book.Status != 'Available' %}
+                    allProductsAvailable="False";
+                    notAvailableProduct = notAvailableProduct+"{{item.Book.Name}};";
+                {% endif %}
+            {% endfor %}
+            if(allProductsAvailable=="False"){
+                alert("Oops Sorry!!!"+notAvailableProduct+"aren't currently on rent or currently not available for rent!!");
+            }
+            else{
+                var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                $.ajax({
+                    url: "{% url 'order' %}",
+                    headers: {'X-CSRFToken': csrftoken },
+                    type : "POST",
+                    datatype : 'html',
+                    data : {
+                        'value':address_value,
+                    },
+                    success: function (response){
+                        if(response == "success"){
+                            window.location.href = "{% url 'order_message' %}";
+                        }
+                        else if(response == "empty"){
+                            document.getElementById("divAlertMsg").innerHTML="Oops Sorry!!! Your cart is empty!";
+                            $('#divAlert').toast('show');
+                        }
+                        else{
+                            document.getElementById("divAlertMsg").innerHTML=response;
+                            $('#divAlert').toast('show');
+                        }
+                    }
+                });
+            }
+        }
+
+    </script>
+{% endblock %}

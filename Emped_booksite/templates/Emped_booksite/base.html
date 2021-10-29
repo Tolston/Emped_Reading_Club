@@ -1,0 +1,605 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		{% block title %}<title>Website</title>{% endblock %}
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/css/intlTelInput.css" integrity="sha512-gxWow8Mo6q6pLa1XH/CcH8JyiSDEtiwJV78E+D+QP0EVasFs8wKXq16G8CLD4CJ2SnonHr4Lm/yY2fSI2+cbmw==" crossorigin="anonymous">
+		<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+		<script src="https://kit.fontawesome.com/bc6ea75b90.js" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.12/js/intlTelInput.js" integrity="sha512-lib7WdJvAnfLLBi5AHdN+wUkcWwpu1fmYzyEHQijZq7WedcwBiwdVNbcML2rAtKvwtOIU7thMGB+O9Kpb9g2Cw==" crossorigin="anonymous"></script>
+
+		<script src="{% static 'Js/main_javascript.js' %}" type="text/javascript"></script>
+        <script src="{% static 'Js/Phone.js' %}" type="text/javascript"></script>
+	</head>
+	<body class="w-100 h-100 m-0 p-0 basic-font-size">
+
+	<!--sidebar-->
+	<div id="menu_sidebar" class="h-100  sidebar">
+		<button type="button" class="close close_icon" onclick="closeNav()">
+			<i class="bi bi-x" style="font-size: 2.5rem;"></i>
+		</button>
+		<div id="sidebar_options" class="pt-5">
+			<a href="{% url 'index-page' %}" class="nav-link text-decoration-none text-lg ">Home</a>
+			<a href="{% url 'profile-page' %}" class="nav-link text-decoration-none text-md">My Account</a>
+			<a href="#" class="nav-link text-decoration-none text-sm">About Us</a>
+			<a href="#" class="nav-link text-decoration-none ">Contact Us</a>
+		</div>
+	</div>
+
+	<!-- base page -->
+	<div id="base" >
+
+		<!-- Navigation Section -->
+		<nav class="navbar-expand sticky-top">
+			<div class="nav shadow-lg pt-2 bg-white rounded">
+
+				<!--logo Section -->
+				<div class="col-lg-2  d-flex  justify-content-between align-items-center">
+
+					<!-- burger button(Hidden for large and xl screen) -->
+					<button class="navbar-toggler d-block d-lg-none d-xl-none" type="button" onclick="open_sidebar()">
+						<i class="bi bi-book" style="font-size: 2rem;"></i>
+					</button>
+
+					<!-- logo for large and xl screen with hyperlink-->
+					<a class="d-none d-lg-block d-xl-block d-sm-none d-md-none pl-5" href="{% url 'index-page' %}">
+						<img src="{% static 'images/Emped-Books-Logo.png' %}" class="img-fluids" width='100px' height='100px' style="max-width:50% max-height:50%">
+					</a>
+
+					<!-- logo for large and xl screen with hyperlink -->
+					<a class="d-lg-none d-xl-none" href="{% url 'index-page' %}">
+						<img src="{% static 'images/Emped-Books-Logo.png' %}" class="img-fluids" width='50px' height='50px' style="max-width:50% max-height:50%">
+					</a>
+
+					<!--notification button -->
+					<a class="d-block d-lg-none d-xl-none" href="{% url 'wishList' %}">
+						<i class="bi bi-heart" style="font-size: 2rem;"></i>
+					</a>
+				</div>
+
+				<!--search bar and menu section -->
+				<div class="col-lg-7 py-md-2 py-2">
+
+					<!--search bar -->
+					<div class="row pt-4  px-5">
+						<div class="input-group d-flex justify-content-center">
+							<div class="input-group-prepend">
+								<button id="dropdownMenuBtn" class="btn btn-saffron dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									All
+								</button>
+								<div class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton">
+									<ul class="dropdownMenuList m-0 p-0">
+										<li class="dropdownMenuListItem px-3 py-2" onclick="UpdateDropdownButton('All')">ALL</li>
+										<li class="dropdownMenuListItem px-3 p-2"  onclick="UpdateDropdownButton('Authors')">Authors</li>
+										<li class="dropdownMenuListItem px-3 p-2"  onclick="UpdateDropdownButton('Books')">Books</li>
+										<li class="dropdownMenuListItem px-3 p-2"  onclick="UpdateDropdownButton('Genres')">Genres</li>
+									</ul>
+								</div>
+							</div>
+							<input id="inputSearch" type="text" class="outline-saffron form-control rounded-start" placeholder="search" autocomplete>
+							<div class="input-group-append">
+								<button id="search" type="button" class="btn btn-saffron " onclick="search()">
+									<i class="bi bi-search"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<!-- menu to account, cart and social media links-->
+				<div class="col-lg-3 d-none d-lg-block d-xl-block d-sm-none d-md-none">
+
+					<!--menu for login, notification and cart -->
+					<div class="row pt-3 pb-1 justify-content-around navbar">
+						<a id="account_link" href="#" class="nav-item text-decoration-none dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span><i class="bi bi-person" style="font-size: 1.5rem;"></i><span id="account_link_span">&nbsp;Login</span></span></a>
+						<ul class="dropdown-menu" aria-labelledby="account_link">
+          					<li><a class=" dropdown-item  text-decoration-none" href="{% url 'profile-page' %}">My profile</a></li>
+          					<li><a class=" dropdown-item text-decoration-none" href="#" onclick="logout()">Logout</a></li>
+        				</ul>
+						<a href="{% url 'wishList' %}" class="nav-item text-decoration-none"><span> <i class="bi bi-heart" style="font-size: 1.5rem;"></i> Wishlist</span></a>
+						<a href="{% url 'cart' %}" class="nav-item text-decoration-none"><span><i class="bi bi-cart4" style="font-size: 1.5rem;"></i> Cart</span></a>
+					</div>
+
+					<!--social media links-->
+					<div class="row justify-content-center">
+						<div class="navbar pt-3">
+							<a href="https://www.facebook.com/EmpedBooksMysore/" target="_blank" rel="noopener noreferrer" class="nav-item px-2"><i class="bi bi-facebook " style="font-size: 1.2rem;"></i></a>
+							<a href="https://www.instagram.com/empedbooks_mysore/" class="nav-item px-2"><i class="bi bi-instagram" style="font-size: 1.2rem;"></i></a>
+							<a href="https://twitter.com/empedbooks" target="_blank" rel="noopener noreferrer" class="nav-item px-2"><i class="bi bi-twitter" style="font-size: 1.2rem;"></i></a>
+							<a href="https://api.whatsapp.com/send?text=https%3A%2F%2Fempedbooks.com%2F" target="_blank" rel="noopener noreferrer" class="nav-item px-2"><i class="bi bi-whatsapp" style="font-size: 1.2rem;"></i></a>
+							<a href="https://www.linkedin.com/in/emped-reading-club-mysore-207b0920a/?originalSubdomain=in" target="_blank" rel="noopener noreferrer" class="nav-item px-2"><i class="bi bi-linkedin" style="font-size: 1.2rem;"></i></a>
+							<a href="mailto:tolston7v@gmail.com" target="_blank" rel="noopener noreferrer" class="nav-item px-2"><i class="bi bi-envelope" style="font-size: 1.2rem;"></i></a>
+							<a href="https://telegram.me/share/url?url=https://empedbooks.com/" target="_blank" rel="noopener noreferrer" class="nav-item px-2"><i class="bi bi-telegram" style="font-size: 1.2rem;"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<!--login section -->
+		<div class="modal fade" tabindex="-1" id="login_section" data-keyboard="false" data-backdrop="static">
+			<div class="modal-lg modal-dialog modal-dialog-centered ">
+				<div class="modal-content border-0 rounded-0">
+					<div class="row justify-content-end p-0">
+
+						<!--login advertisement section -->
+						<div class="col-lg-5 col-sm-1 col-md-1 col-1 d-none d-sm-none d-md-none d-lg-block m-0 no-gutter">
+							<img src="{% static 'images/book_cover.jpeg' %}" class="" style="width:100%;height:100%;" />
+						</div>
+
+						<!-- login and sign up form section -->
+						<div class="col-lg-7 col-sm-11 col-md-11 col-11">
+
+							<!-- logo -->
+							<div class="row justify-content-center mt-4">
+								<img src="{% static 'images/Emped-Books-Logo.png' %}" class="img-fluid" width='100px' height='100px' style="max-width:50% max-height:50%">
+							</div>
+
+
+							<div id="SendOTP_div" class="">
+
+								<!-- send otp form -->
+								<form id="sendotp_form" class="flex-column justify-content-center p-2 mt-4">
+
+									{% csrf_token %}
+
+									<div class="container-fluid mt-4">
+
+										<!-- Add phone number -->
+										<div class=" container mb-4 pl-0">
+
+											<div class="input-group mb-4">
+												<span class="input-group-text outline-saffron border-right-0 rounded-0 mb-2">+91</span>
+												<input type="tel" class="outline-saffron border-left-0 form-control rounded-0 mb-2" id="mobile_number" placeholder="Enter Mobile number" />
+											</div>
+
+											<!--validation msg for phone number-->
+											<div class="container-fluid d-flex justify-content-center">
+												<div id="validation_msg" class=" text-align-center error-msg d-none"></div>
+											</div>
+
+											<!--Send otp  button-->
+											<div class="container d-flex justify-content-center mb-5">
+												<button id="phone_otp_btn" type="button" class="btn btn-saffron px-lg-5" onclick="send_otp()">REQUEST OTP</button>
+											</div>
+
+										</div>
+									</div>
+								</form>
+								<!-- end of send otp form -->
+
+							</div>
+
+
+							<div id="OtpVerify_div" class="d-none">
+
+								<!-- otp verify form -->
+								<form id="otpverify_form" class="flex-column justify-content-center p-2 mt-4">
+
+									{% csrf_token %}
+
+									<div class="container-fluid mt-4">
+
+										<!-- OTP Sent message -->
+										<div class="container d-flex justify-content-center mb-3">
+											<span class="text-center text-saffron custom-h5">Please enter the OTP sent to <span id="span_otpmsg"></span>.&nbsp;<a href="" class="custom-h5 text-decoration-none text-primary font-weight-bold">change</a></span>
+										</div>
+										<!-- End of OTP sent message -->
+
+										<!-- OTP input -->
+										<div class="input-group ">
+											<span class="input-group-text outline-saffron border-right-0 rounded-0 mb-2">OTP</span>
+											<input type="text" class="outline-saffron border-left-0 form-control rounded-0 mb-2" id="input_otp" placeholder="Enter OTP" />
+										</div>
+										<!-- End of OTP input -->
+
+										<!-- otp validation message-->
+										<div class="container-fluid d-flex justify-content-center mb-4">
+											<div id="otp_validation_msg" class=" text-align-center error-msg d-none"></div>
+										</div>
+										<!-- end of otp validation message -->
+
+										<!-- OTP verify button -->
+										<div class="container d-flex justify-content-center mb-3">
+											<button id="otp_verify_btn" type="button" class="btn  btn-saffron px-lg-5" onclick="otp_verify()">Verify OTP</button>
+										</div>
+										<!-- end of OTP verify button -->
+
+										<!-- Resend code link -->
+										<div class="container d-flex justify-content-center mb-2">
+											<span class="text-saffron">Not received your code? <a href="#" class="text-decoration-none text-primary font-weight-bold" onclick="send_otp()">Rend code</a></span>
+										</div>
+										<!-- end of Resend code link -->
+
+									</div>
+
+								</form>
+								<!-- end of otp verify form -->
+
+							</div>
+
+							<!-- Sign up form -->
+							<div id="signup_div" class="d-none">
+								<form id="signup_form" class="flex-column justify-content-center p-2 " >
+
+									<div class="container">
+
+										<!--First name-->
+										<div class="container mb-2">
+											<div class="input-group ">
+												<!--<span class="input-group-text outline-saffron border-right-0 rounded-0 ">First name</span>-->
+												<input type="text" id="input_fname" class="outline-black border-3 form-control rounded-0" placeholder="First name" >
+											</div>
+										</div>
+
+										<!--Last name-->
+										<div class="container mb-2">
+											<div class="input-group">
+												<!--<span class="input-group-text outline-saffron border-right-0 rounded-0">Last Name</span>-->
+												<input type="text" id="input_lname" class="outline-black border-3 form-control rounded-0" placeholder="Last name">
+											</div>
+										</div>
+
+										<!--Door number-->
+										<div class="container mb-2">
+											<div class="input-group">
+												<!--<span class="input-group-text outline-saffron border-right-0 rounded-0">Door no</span>-->
+												<input type="text" id="input_doorno" class="outline-black border-3 form-control rounded-0" placeholder="Door number">
+											</div>
+										</div>
+
+										<!--Address-->
+										<div class="container mb-2">
+											<div class="input-group">
+												<!--<span class="input-group-text outline-saffron border-right-0 rounded-0">Address</span>-->
+												<input type="text" id="input_address" class="outline-black border-3 form-control rounded-0" placeholder="Address" >
+											</div>
+										</div>
+
+										<!--Landmark-->
+										<div class="container mb-2">
+											<div class="input-group">
+												<!--<span class="input-group-text outline-saffron border-right-0 rounded-0">Address</span>-->
+												<input type="text" id="input_landmark" class="outline-black border-3 form-control rounded-0" placeholder="Nearest Landmark" >
+											</div>
+										</div>
+
+										<!-- Sign Up button -->
+										<div class="container d-flex justify-content-center mb-4">
+											<button id="signup_btn" type="button" class="btn btn-lg btn-saffron px-5" onclick="validate_signup()">Sign Up</button>
+										</div>
+
+									</div>
+								</form>
+							</div>
+							<!-- end of sign up form -->
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--body of the website -->
+		{% block body %}
+
+		{% endblock %}
+
+		<!--footer section -->
+		<div class="footer big-footer">
+			<div class="row py-4  no-gutter mx-lg-5 mx-0" style="background-color:none; border-bottom:1px groove;">
+				<div class="col-lg-3 col-md-6 col-sm-6 col-8">
+					<ul class="px-2 px-md-5">
+						<li class="footer-header"><h3 class="custom-h3"><a href="#">Emped Reading Club And Learning Pvt Ltd</a></h3></li>
+						<li class="footer-list"><a href="#">A Place To Discuss Everything About Books!!!<br>Rent A Book Of Your Choice And Get It Delivered At Your Doorstep Within Hours.</a></li>
+					</ul>
+				</div>
+				<div class="col-lg-1 col-md-3 col-sm-3 col-4">
+					<ul class="px-2 px-md-5">
+						<li class="footer-header"><h5 class="custom-h5"><a href="#">Our Stores</a></h5></li>
+						<li class="footer-list"><a href="#">Mysore</a></li>
+					</ul>
+				</div>
+				<div class="col-lg-2 col-md-3 col-sm-3 col-4">
+					<ul class="px-2 px-md-5">
+						<li class="footer-header"><h5 class="custom-h5"><a href="#">Navigation</a></h5></li>
+						<li class="footer-list"><a href="#">Home</a></li>
+						<li class="footer-list"><a href="#">Books</a></li>
+						<li class="footer-list"><a href="#">My Account</a></li>
+						<li class="footer-list"><a href="#">About</a></li>
+						<li class="footer-list"><a href="#">Contact Us</a></li>
+					</ul>
+				</div>
+				<div class="col-lg-1 col-md-2 col-sm-2 col-4">
+					<ul class="px-2 px-md-5">
+						<li class="footer-header"><h5 class="custom-h5"><a href="#">Help</a></h5></li>
+						<li class="footer-list"><a href="#">FAQs</a></li>
+						<li class="footer-list"><a href="#">24*7 Support</a></li>
+					</ul>
+				</div>
+				<div class="col-lg-2 col-md-4 col-sm-4 col-4">
+					<ul class="px-2 px-md-5">
+						<li class="footer-header"><h5 class="custom-h5"><a href="#">Documents</a></h5></li>
+						<li class="footer-list"><a href="#">Privacy Policy</a></li>
+						<li class="footer-list"><a href="#">Terms & Conditions</a></li>
+					</ul>
+				</div>
+				<div class="col-lg-3 col-md-6 col-sm-6 col-12">
+					<ul class="px-2 px-md-4">
+						<li class="footer-header"><h5 class="custom-h5"><a href="#">Contact Us</a></h5></li>
+						<li class="footer-list"><a href="#">Phone no: +91 9019468793</a></li>
+						<li class="footer-list"><a href="#">Email: ourempedbooks@gmail.com</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<!-- links -->
+			<div class="row justify-content-center py-4  mx-lg-5 mx-0">
+				<a href="https://www.facebook.com/EmpedBooksMysore/" target="_blank" rel="noopener noreferrer" class="px-2 footer-icon footer-facebook-icon"><i class="bi bi-facebook " style="font-size: 5vmin; "></i></a>
+				<a href="https://www.instagram.com/empedbooks_mysore/" target="_blank" rel="noopener noreferrer" class="px-2 footer-icon footer-instagram-icon"><i class="bi bi-instagram " style="font-size: 5vmin; "></i></a>
+				<a href="https://twitter.com/empedbooks" target="_blank" rel="noopener noreferrer" class="px-2 footer-icon footer-twitter-icon"><i class="bi bi-twitter " style="font-size: 5vmin; "></i></a>
+				<a href="https://api.whatsapp.com/send?text=https%3A%2F%2Fempedbooks.com%2F" target="_blank" rel="noopener noreferrer" class="px-2 footer-icon footer-whatsapp-icon"><i class="bi bi-whatsapp " style="font-size: 5vmin;;  "></i></a>
+				<a href="https://www.linkedin.com/in/emped-reading-club-mysore-207b0920a/?originalSubdomain=in" target="_blank" rel="noopener noreferrer" class="px-2 footer-icon footer-linkedin-icon"><i class="bi bi-linkedin " style="font-size: 5vmin;  "></i></a>
+				<a href="#" target="_blank" rel="noopener noreferrer" class="px-2 footer-icon"><i class="bi bi-envelope" style="font-size: 5vmin;"></i></a>
+				<a href="https://telegram.me/share/url?url=https://empedbooks.com/" target="_blank" rel="noopener noreferrer" class="px-2 footer-icon footer-telegram-icon"><i class="bi bi-telegram " style="font-size: 5vmin;  "></i></a>>
+			</div>
+			<!-- end of links -->
+
+		</div>
+		<div class="footer container-footer bg-light">
+			<div class="  bg-light text-center text-lg-start text-center p-3 " style="background-color: rgba(0, 0, 0, 0.2);">
+				Emped Reading Club And Learning Pvt Ltd:
+				<a class="text-dark text-decoration-none" href="#">Emped_Booksite.com</a>
+				<div class="d-lg-none d-xl-none">
+					<br><br><br>
+				</div>
+			</div>
+		</div>
+
+		<!--footer fixed navigation for medium and small screen -->
+		<nav class=" navbar-expand fixed-bottom d-flex justify-content-between d-lg-none d-xl-none shadow-lg bg-white rounded">
+			<a href="{% url 'index-page' %}" class="nav-item px-2 text-decoration-none"><i class="bi bi-house d-flex justify-content-center" style="font-size: 2rem;"></i><span class="font-weight-bold">Home</span></a>
+			<a href="#" class="nav-item px-2 text-decoration-none"><i class="bi bi-shop-window d-flex justify-content-center" style="font-size: 2rem;"></i><span class="font-weight-bold">Category</span></a>
+			<a href="{% url 'profile-page' %}" class="nav-item px-2 text-decoration-none"><i class="bi bi-person d-flex justify-content-center" style="font-size: 2rem;"></i><span id="mobile_account_link" class="font-weight-bold">Account</span></a>
+			<a href="{% url 'cart' %}" class="nav-item px-2 text-decoration-none"><i class="bi bi-handbag d-flex justify-content-center" style="font-size: 2rem;"></i><span class="font-weight-bold">Bag</span></a>
+		</nav>
+		<!-- end of footer fixed navigation for medium and small screen -->
+
+	</div>
+
+	<!-- toast block -->
+	<div class="position-fixed p-3 " style="z-index: 10000000; right: 0; top: 0;">
+        <div id="divAlert" class="toast hide" style="opacity:100%" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000" >
+            <div id="toast_head" class="toast-header bg-success text-white">
+                <strong class="mr-auto ">Message</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span class="text-white" aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="toast_body" class="toast-body bg-success text-white"></div>
+        </div>
+    </div>
+	<!-- end of toast block -->
+
+	{% block js %}
+
+	{% endblock %}
+	<script>
+
+		//otp verification
+		var current_user="";
+		var dialCode = document.getElementById("input_dial_code");
+		var number = document.getElementById("mobile_number");
+		var validation_msg = document.getElementById("validation_msg");
+		var otp_validation_msg = document.getElementById("otp_validation_msg");
+		var otp = document.getElementById("input_otp");
+		var code = document.getElementById("dialcode");
+		var account_link = document.getElementById("account_link");
+		var fname = document.getElementById("input_fname");
+		var lname = document.getElementById("input_lname");
+		var door = document.getElementById("input_doorno");
+		var address = document.getElementById("input_address");
+		var landmark = document.getElementById("input_landmark");
+		var signup_phoneno = document.getElementById("input_phone");
+		var signup_password = document.getElementById("input_password");
+		var regex = /^\d{10}$/;
+
+		function send_otp(){
+			if(!number.value.match(regex) || number.value == " " ){
+				validation_msg.innerHTML = "Please enter a number in valid format";
+				validation_msg.classList.remove("d-none");
+				number.classList.add("textbox-error");
+			}
+			else
+			{
+				validation_msg.classList.add("d-none");
+				number.classList.remove("textbox-error");
+				var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+				$.ajax({
+					url: "{% url 'otp' %}",
+					headers: {'X-CSRFToken': csrftoken },
+					type: "POST",
+					dataType:'html',
+					data: {
+							'type': 'authenticate',
+							'Phoneno': number.value,
+					},
+					success: function (response){
+								if("success"){
+									document.getElementById("span_otpmsg").innerHTML = number.value;
+									document.getElementById("toast_body").innerHTML="OTP Sent!!!";
+									document.getElementById("SendOTP_div").classList.add("d-none");
+									document.getElementById("OtpVerify_div").classList.remove("d-none");
+									$('#divAlert').toast('show');
+								}
+								else{
+									document.getElementById("toast_body").html="Mobile number invalid!!!";
+									document.getElementById("SendOTP_div").classList.remove("d-none");
+									document.getElementById("OtpVerify_div").classList.add("d-none");
+									$('#divAlert').toast('show');
+								}
+							}
+				});
+			}
+		}
+
+		function otp_verify(){
+			if(otp.value =="" && Number(otp.value) == NaN){
+				otp_validation_msg.innerHTML = "OTP entered is not in valid format";
+				otp_validation_msg.classList.remove("d-none");
+				//number.classList.add("textbox-error");
+			}
+			else{
+				otp_validation_msg.classList.add("d-none");
+				number.classList.remove("textbox-error");
+				//dialCode.classList.remove("textbox-error");
+				var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+				$.ajax({
+					url: "{% url 'login' %}",
+					headers: {'X-CSRFToken': csrftoken },
+					type: "POST",
+					dataType:'html',
+					data: {
+							'Phoneno': (number.value),
+							'OTP': otp.value,
+					},
+					success: function (response){
+								if(response == 'new_customer'){
+									document.getElementById("OtpVerify_div").classList.add("d-none");
+									document.getElementById("signup_div").classList.remove("d-none");
+									//document.getElementById("inputCountryCode").value = dialCode.value;
+									document.getElementById("input_phone").value = number.value;
+									document.getElementById("input_password").value = otp.value;
+								}
+								else if(response == 'no_match'){
+								    alert("Invalid Credentials!!!")
+								}
+								else{
+									document.getElementById("account_link_span").innerHTML=response;
+									document.getElementById("mobile_account_link").innerHTML=response;
+									sessionStorage.setItem('User_Name', response);
+									 $("#login_section").modal('hide');
+								}
+							}
+				});
+			}
+			document.getElementById("account_link").classList.remove("d-none");
+		}
+
+		function logout(){
+			document.getElementById("account_link_span").innerHTML="Login";
+			document.cookie = "userCookie=;Path=/;Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+			var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+				$.ajax({
+					url: "{% url 'logout' %}",
+					headers: {'X-CSRFToken': csrftoken },
+					type: "POST",
+					dataType:'html',
+					success: function (response){
+								if(response == 'success'){
+									sessionStorage.removeItem('User_Name');
+									window.location.href="{% url 'index-page' %}";
+								}
+								else{
+									alert("Logout failed");
+								}
+							}
+				});
+		}
+
+		// validating all inputs and signing up
+
+		function validate_signup(){
+			var token = 0;
+
+			if(fname.value==""){
+				fname.classList.add("textbox-error");
+			}
+			else{
+				fname.classList.remove("textbox-error");
+				token = token+ 1;
+			}
+			if(address.value==""){
+				address.classList.add("textbox-error");
+			}
+			else{
+				address.classList.remove("textbox-error");
+				token = token+ 1;
+			}
+			if(landmark.value==""){
+				landmark.classList.add("textbox-error");
+			}
+			else{
+				landmark.classList.remove("textbox-error");
+				token = token+ 1;
+			}
+			if(token == 3){
+				var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+				$.ajax({
+					url: "{% url 'register' %}",
+					headers: {'X-CSRFToken': csrftoken },
+					type: "POST",
+					dataType:'html',
+					data: {
+						'Fname': fname.value,
+						'Lname': lname.value,
+						'Door': door.value,
+						'Address': address.value,
+						'Landmark': landmark.value,
+					},
+					success: function (response){
+								if(response == 'Failed'){
+									alert("Registration Failed!!!");
+								}
+								else{
+									document.getElementById("account_link_span").innerHTML=response;
+									document.getElementById("mobile_account_link").innerHTML=response;
+									sessionStorage.setItem('User_Name', response);
+									$("#login_section").modal('hide');
+								}
+					}
+				});
+			}
+			else{
+				$("#login_section").modal('show');
+			}
+		}
+
+		var SearchCategory = "All";
+
+		function UpdateDropdownButton(category){
+    		var btn = document.getElementById("dropdownMenuBtn");
+    		btn.innerHTML=category;
+    		SearchCategory = category;
+		}
+
+		function search(){
+			var text = document.getElementById("inputSearch").value;
+			var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+			$.ajax({
+				url: "{% url 'search' %}",
+				headers: {'X-CSRFToken': csrftoken },
+				type: "POST",
+				dataType:'html',
+				data: {
+					'category': SearchCategory,
+					'search_text': text,
+				},
+				success: function (response){
+					if(response == 'success'){
+						window.location.href="{% url 'result' %}";
+					}
+				}
+			});
+		}
+
+	</script>
+	</body>
+</html>

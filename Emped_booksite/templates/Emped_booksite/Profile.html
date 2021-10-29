@@ -1,0 +1,300 @@
+{% extends 'base.html' %}
+{% block body %}
+
+    <!--accordion for profile information -->
+    {% for user in customer %}
+    <div id="div_main_profile" class="container-fluid bg-warning">
+        <div class="container-fluid row flex justify-content-between px-lg-5 px-md-5 pt-lg-3 pt-2 py-2">
+            <div class="pl-lg-5 text-light">
+                <h2 class="custom-h2"><span>{{user.FirstName}}</span>&nbsp;<span>{{user.LastName}}</span></h2>
+                <span class="text">{{user.PhoneNo}}</span>
+            </div>
+            <div class="pl-lg-5 pt-3 row">
+                <div class="px-2">
+                    <a href="{{ user.get_absolute_url }}" class="btn btn-outline-light rounded-0" style="font-size:2.5vmin;">Edit Personal Information</a>
+                </div>
+                <div class="px-2">
+                    <a href="#" class="btn btn-outline-light rounded-0" style="font-size:2.5vmin;" onclick="logout()">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="row bg-white mx-lg-2 mx-md-2">
+<!--            <div class="col-lg-3 col-md-3 col-sm-1 col-12 pt-3 px-0 bg-yellow-very-light">-->
+<!--                <div id="div_accordion_profile" class="accordion px-0">-->
+<!--                    <div class="accordion-item ">-->
+<!--                        <div class="accordion-header" id="header_current_reading">-->
+<!--                            <a id="current_reading_link" href="#" class="row text-decoration-none m-0 py-3 px-0" data-toggle="collapse" data-target="#div_current_reading" aria-expanded="True" aria-controls="div_current_reading" onclick="btn_current_reading()">-->
+<!--                                Current Reading-->
+<!--                            </a>-->
+<!--                            <div id="div_current_reading" class="accordion-toggle collapse" aria-labelledby="header_current_reading" data-bs-parent="accordion_profile">-->
+<!--                                <div class="accordion-body ">-->
+<!--                                    {% for  book in current_reading %}-->
+<!--                                        <div class="row container-fluid py-2 my-2 mx-0 shadow-sm ">-->
+<!--                                            <div class="col-lg-2 col-md-2 col-2 ">-->
+<!--                                                <img src="{{book.Book.Image.url}}" class="img-fluid" style="width:14vmin; height:17vmin"/>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-lg-6 col-md-6 col-6 align-self-center">-->
+<!--                                                <div class="row">-->
+<!--                                                    <a class="cart_book_title text-sm  font-weight-bold" style="font-size:3vmin;">{{book.Book.Name}}</a>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-lg-4 col-md-4 col-4 align-self-center">-->
+<!--                                                <div class="row">-->
+<!--                                                    <div class=" text-sm text-saffron font-weight-bold" style="font-size:2.5vmin;">Order #&nbsp;</div>-->
+<!--                                                    <div class=" text-sm  font-weight-bold" style="font-size:2.5vmin;">{{book.id}}</div>-->
+<!--                                                </div>-->
+<!--                                                <div class="row">-->
+<!--                                                    <div class=" text-sm text-saffron font-weight-bold" style="font-size:2.5vmin;">Booking Date: &nbsp;</div>-->
+<!--                                                    <div class=" text-sm  font-weight-bold" style="font-size:2.5vmin;">{{book.StartDate}}</div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    {% endfor %}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="accordion-item">-->
+<!--                        <div class="accordion-header" id="header_return_book">-->
+<!--                            <a id="return_book_link" href="#" class="row text-decoration-none m-0 py-3 px-0" data-toggle="collapse" data-target="#div_return_book" aria-expanded="false" aria-controls="div_return_book" onclick="btn_return_book()">-->
+<!--                                Return Book-->
+<!--                            </a>-->
+<!--                            <div id="div_return_book" class="accordion-toggle collapse" aria-labelledby="header_return_book" data-bs-parent="accordion_profile">-->
+<!--                                <div class="accordion-body">-->
+<!--                                    Return a Book-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="accordion-item">-->
+<!--                        <div class="accordion-header" id="header_history_wallet">-->
+<!--                            <a href="#" id="history_wallet_link"class="row text-decoration-none m-0 py-3 px-0" data-toggle="collapse" data-target="#div_history_wallet" aria-expanded="false" aria-controls="div_history_wallet" onclick="btn_history_wallet()">-->
+<!--                                Previous Reading-->
+<!--                            </a>-->
+<!--                            <div id="div_history_wallet" class="accordion-toggle collapse" aria-labelledby="header_history_wallet" data-bs-parent="accordion_profile">-->
+<!--                                <div class="accordion-body">-->
+<!--                                    Previous Reading-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div id="div_accordion_invite" class=" accordion px-0 mt-3">-->
+<!--                    <div class="accordion-item">-->
+<!--                        <div class="accordion-header" id="header_invite_friends">-->
+<!--                            <a href="#" id="invite_friends_link" class="row text-decoration-none m-0 py-3 px-0" data-toggle="collapse" data-target="#div_invite_friends" aria-expanded="false" aria-controls="div_invite_friends" onclick="btn_invite_friends()">-->
+<!--                                Invite a friend-->
+<!--                            </a>-->
+<!--                            <div id="div_invite_friends" class="accordion-toggle collapse" aria-labelledby="header_invite_friends" data-bs-parent="div_accordion_invite">-->
+<!--                                <div class="accordion-body">-->
+<!--                                    invite friends-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="accordion-item">-->
+<!--                        <div class="accordion-header" id="header_join_club">-->
+<!--                            <a href="#" id="join_club_link" class="row text-decoration-none m-0 py-3 px-0" data-toggle="collapse" data-target="#div_join_club" aria-expanded="false" aria-controls="div_join_club" onclick="btn_join_club()">-->
+<!--                                Join our club-->
+<!--                            </a>-->
+<!--                        </div>-->
+<!--                        <div id="div_join_club" class="accordion-toggle collapse" aria-labelledby="header_join_club" data-bs-parent="div_accordion_invite">-->
+<!--                            <div class="accordion-body">-->
+<!--                                join or club-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div id="div_target_section" class="col-lg-9 col-md-9 col-sm-11">-->
+<!--                <div id="div_profile_invite_display"></div>-->
+<!--            </div>-->
+<!--            <nav class="container-fluid my-2" aria-label="breadcrumb">-->
+<!--              <ol class="breadcrumb ">-->
+<!--                  <li class="breadcrumb-item" aria-current="page">Home</li>-->
+<!--              </ol>-->
+<!--            </nav>-->
+<!--            <div class="container-fluid">-->
+<!--                <div class="">-->
+<!--                    <a herf="#"><img src="https://img.icons8.com/ios/50/000000/reading.png"/><br>Current Reading</a>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <a href="#"><img src="https://img.icons8.com/wired/64/000000/return-book.png"/><br>Return Book</a>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <a href="#"><img src="https://img.icons8.com/wired/64/000000/book-shelf.png"/><br>Previous Reading</a>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="card text-center col-12 px-0 outline-saffron rounded-0">
+                <div class="card-header outline-saffron bg-white">
+                    <ul class="nav nav-tabs card-header-tabs outline-saffron">
+                        <li class="nav-item mt-2 " role="presentation">
+                            <a class=" nav-link active px-lg-3 px-md-3 px-1 text-dark" id="currentReadingTab" data-toggle="tab" href="#divCurrentReading" role="tab" aria-controls="divCurrentReading" aria-selected="true" style="font-size:2.4vmin;">Current Reading</a>
+                        </li>
+                        <li class="nav-item mt-2" role="presentation">
+                            <a class="nav-link px-lg-3 px-md-3 px-1 text-dark" id="previousReadingTab" data-toggle="tab" href="#divPreviousReading" role="tab" aria-controls="divProfile" aria-selected="false"style="font-size:2.4vmin;">Previous Reading</a>
+                        </li>
+                        <li class="nav-item mt-2" role="presentation">
+                            <a class="nav-link px-lg-3 px-md-3 px-1 text-dark" id="returnBookTab" data-toggle="tab" href="#divReturnBook" role="tab" aria-controls="divContact" aria-selected="false" style="font-size:2.4vmin;">Return Book</a>
+                        </li>
+                        <li class="nav-item mt-2" role="presentation">
+                            <a class="nav-link px-lg-3 px-md-3 px-1 text-dark" id="inviteFriendsTab" data-toggle="tab" href="#divInviteFriends" role="tab" aria-controls="divInvite" aria-selected="false" style="font-size:2.4vmin;">Invite Friends</a>
+                        </li>
+                        <li class="nav-item mt-2" role="presentation">
+                            <a class="nav-link px-lg-3 px-md-3 px-1 text-dark" id="joinClubTab" data-toggle="tab" href="#divJoinClub" role="tab" aria-controls="divJoin" aria-selected="false" style="font-size:2.4vmin;">Join Our Club</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                     <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="divCurrentReading" role="tabpanel" aria-labelledby="currentReadingTab">
+                            {% if  current_reading.exists %}
+                                {% for  book in current_reading %}
+                                    <div class="row container-fluid py-2 my-2 mx-0 ">
+                                        <div class="col-lg-2 col-md-2 col-3 ">
+                                            <img src="{{book.Book.Image.url}}" class="img-fluid" style="width:14vmin; height:17vmin"/>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-5 align-self-center">
+                                            <div class="row">
+                                                <a class="cart_book_title text-sm  font-weight-bold" style="font-size:3vmin;">{{book.Book.Name}}</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-4 align-self-center">
+                                            <div class="row">
+                                                <div class=" text-sm text-saffron font-weight-bold" style="font-size:2.5vmin;">Order #&nbsp;</div>
+                                                <div class=" text-sm  font-weight-bold" style="font-size:2.5vmin;">{{book.id}}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class=" text-sm text-saffron font-weight-bold" style="font-size:2.5vmin;">Booking Date: &nbsp;</div>
+                                                <div class=" text-sm  font-weight-bold" style="font-size:2.5vmin;">{{book.StartDate}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="outline-saffron">
+                                {% endfor %}
+                            {% else %}
+                                <div>Oops Sorry!!! You do not have any current readings!!!</div>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane fade" id="divPreviousReading" role="tabpanel" aria-labelledby="previousReadingTab">
+                            {% if  previous_reading.exists %}
+                                {% for  book in previous_reading %}
+                                    <div class="row container-fluid py-2 my-2 mx-0 ">
+                                        <div class="col-lg-2 col-md-2 col-4 ">
+                                            <img src="{{book.Book.Image.url}}" class="img-fluid" style="width:14vmin; height:17vmin"/>
+                                            <a href="#" class="btn btn-saffron px-1 px-sm-1 px-md-1 my-1 d-lg-none d-md-none d-block" style="font-size:2.3vmin;">Return Book</a>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-5 align-self-center">
+                                            <div class="row">
+                                                <a class="cart_book_title text-sm  font-weight-bold" style="font-size:3vmin;">{{book.Book.Name}}</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-4 align-self-center">
+                                            <div class="row">
+                                                <div class=" text-sm text-saffron font-weight-bold" style="font-size:2.5vmin;">Order #&nbsp;</div>
+                                                <div class=" text-sm  font-weight-bold" style="font-size:2.5vmin;">{{book.id}}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class=" text-sm text-saffron font-weight-bold" style="font-size:2.5vmin;">Price &#8377;</div>
+                                                <div class=" text-sm  font-weight-bold" style="font-size:2.5vmin;">{{book.rent_price}}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class=" text-sm text-saffron font-weight-bold" style="font-size:2.5vmin;">Booking Date: &nbsp;</div>
+                                                <div class=" text-sm  font-weight-bold" style="font-size:2.5vmin;">{{book.StartDate}}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class=" text-sm text-saffron font-weight-bold" style="font-size:2.5vmin;">Return Date: &nbsp;</div>
+                                                <div class=" text-sm  font-weight-bold" style="font-size:2.5vmin;">{{book.ReturnedDate}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="outline-saffron">
+                                {% endfor %}
+                            {% else %}
+                                <div>Oops Sorry!!! You do not have any previous readings!!!</div>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane fade" id="divReturnBook" role="tabpanel" aria-labelledby="returnBookTab">
+                            {% for book in current_reading %}
+                                <div class="row container-fluid py-2 my-2 mx-0 ">
+                                    <div class="col-lg-2 col-md-2 col-3 ">
+                                        <img src="{{book.Book.Image.url}}" class="img-fluid" style="width:14vmin; height:17vmin"/>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-5 align-self-center">
+                                        <div class="row">
+                                            <a class="cart_book_title text-sm  font-weight-bold" style="font-size:3vmin;">{{book.Book.Name}}</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-2 align-self-center">
+                                        <div class="row ">
+                                            <div class=" text-sm text-saffron font-weight-bold" style="font-size:2.5vmin;">Price: &#8377;</div>
+                                            <div class=" text-sm  font-weight-bold" style="font-size:2.5vmin;">{{book.rent_price}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-2 align-self-center">
+                                        <div class="row ">
+                                            <a href="#" class="btn btn-saffron basic-font-size px-2" onclick="returnBook({{book.id}})">Return Book</a>
+                                        </div>
+                                    </div>
+<!--                                    <div class="col-lg-1 col-md-2 col-2 align-self-center">-->
+<!--                                        <div class="row">-->
+<!--                                            <label class="checkboxLabel">-->
+<!--                                                <input type="checkbox" id="checkReturn{{book.id}}" name="checkReturn" value="{{book.id}}">-->
+<!--                                                <span class="checkmark"></span>-->
+<!--                                            </label>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+                                </div>
+                                <hr class="outline-saffron">
+                            {% endfor %}
+<!--                            <div>-->
+<!--                                <a href="#" class="btn btn-saffron basic-font-size px-2" onclick="returnBook()">Return Book</a>-->
+<!--                            </div>-->
+                        </div>
+                        <div class="tab-pane fade" id="divInviteFriends" role="tabpanel" aria-labelledby="inviteFriendsTab">invite</div>
+                        <div class="tab-pane fade" id="divJoinClub" role="tabpanel" aria-labelledby="joinClubTab">...</div>
+                     </div>
+              </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="position-fixed p-3 " style="z-index: 10000000; right: 0; top: 0;">
+        <div id="divAlert" class="toast hide" style="opacity:100%" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000" >
+            <div class="toast-header cart-alert-toast-header">
+                <strong class="mr-auto ">Alert</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="divAlertMsg" class="toast-body cart-alert-toast-body"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function returnBook(bookValue){
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            $.ajax({
+                url: "{% url 'return_book' %}",
+                headers: { 'X-CSRFToken':csrftoken },
+                type: "POST",
+                datatype: 'html',
+                data: {
+                    'bookValue': bookValue,
+                },
+                success: function(response){
+                    if(response == "success"){
+                        window.location.href = "{% url 'return_message' %}";
+                    }
+                    else if(response == "empty"){
+                        document.getElementById("divAlertMsg").innerHTML="Oops Sorry!!! Your cart is empty!";
+                        $('#divAlert').toast('show');
+                    }
+                    else{
+                        document.getElementById("divAlertMsg").innerHTML=response;
+                        $('#divAlert').toast('show');
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}

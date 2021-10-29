@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="container-fluid p-lg-5 p-md-5 py-2">
+        <div class="row px-lg-5 px-md-5 px-0">
+            <input type="hidden" id="inputHiddenBook" value="{{book.id}}"/>
+            <div class="col-4 py-4">
+                <div class="position-relative" style="width:20vmin; height:30vmin;">
+                    <img id="bookImage" src="{{book.Image.url}}" class="img-fluid" />
+                    <div id="divCartMsg"  class="toast" style="z-index:10; " role="alert" aria-live="assertive" aria-atomic="true">
+                            <div id="divMsg"class="overlay-center add-to-cart-msg bg-dark px-2 py-1">Added to cart</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <h1 class="custom-h1">{{book.Name}}</h1>
+                </div>
+                <br>
+                <div class="row justify-content-start text-danger ">
+                    <table class="table table-bordered table-sm mr-2">
+                        <thead>
+                            <tr class="bg-saffron">
+                                <th scope="col">Weeks</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3</th>
+                                <th scope="col">4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="font-weight-bold">
+                                <th>Rent</th>
+                                <td class="basic-font-size">&#8377; {{book.Price1}}</td>
+                                <td class="basic-font-size">&#8377; {{book.Price2}}</td>
+                                <td class="basic-font-size">&#8377; {{book.Price3}}</td>
+                                <td class="basic-font-size">&#8377; {{book.Price4}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="container px-0"><h4 class="custom-h4">Description:</h4></div>
+                    <div class="container basic-font-size">{{book.Description}}</div>
+                </div>
+                <br>
+                <div class="row ">
+                    <span><h4 class="custom-h4">Author: </h4></span>
+                    {% for author in book.Author.all %}
+                        <a href="{{ author.get_absolute_url }} " class="basic-font-size" style="text-decoration-line:underline">{{author}}</a>
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    <span><h4 class="custom-h4">Genre: </h4></span>
+                    {% for genre in book.Genre.all %}
+                        <a href="{{ genre.get_absolute_url }} " class="basic-font-size" style="text-decoration-line:underline">{{genre}}</a>
+                    {% endfor %}
+                </div>
+                <br>
+                <div class="row align-items-center">
+                    <button class="btn p-2 btn-saffron px-lg-5 px-md-5 basic-font-size" onclick="addToCart()">Add to cart</button>
+                    <button class="mx-4 btn btn-dark p-2 basic-font-size px-lg-5 px-md-5" onclick="addToWishList()">Add to Wishlist</button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <hr>
+        <br>
+        <div class="row px-2">
+            <div class="w-100 type-header "><h2 class="custom-h2 ">More Books of this Genres</h2></div>
+            <div id="divGenreList" class="py-3 card-holder " onscroll="btnNavigatorAble(this)">
+                <button class="book-grid-navigator book-grid-navigator-left rounded p-0" type="button" onclick="btn_grid_scroll_left(this)" >
+                    <span class="mb-3 d-flex justify-content-center text-center">
+                        <i class="bi bi-chevron-left" style="font-size: 7vmin;"></i>
+                    </span>
+                </button>
+                <button class="book-grid-navigator book-grid-navigator-right rounded p-0" type="button" onclick="btn_grid_scroll_right(this)">
+                    <span class="mb-3 d-flex justify-content-center text-center">
+                        <i class="bi bi-chevron-right" style="font-size: 7vmin;"></i>
+                    </span>
+                </button>
+                {% for book in more_books %}
+                    <div class=" card border-0 shadow rounded mx-2 d-inline-block custom-type-card-size">
+                        <a href="{{ book.get_absolute_url }}" class="text-decoration-none">
+                            <img src="{{ book.Image.url }}" class="img-fluid custom-type-card-image-size">
+                            <div class="text-center py-2 "><h5 class="custom-h5">{{ book.Name }}</h5></div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+       $('#divCartMsg').on('show.bs.toast', function () {
+            bookImage.classList.add("opacity-50");
+        });
+
+        $('#divCartMsg').on('hide.bs.toast', function () {
+            bookImage.classList.remove("opacity-50");
+        });
+
+        function addToCart(){
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            $.ajax({
+                url: "{% url 'addToCart' %}",
+                headers: { 'X-CSRFToken': csrftoken },
+                type: "POST",
+                datatype: 'html',
+                data:{
+                    'book': {{book.id}},
+                },
+                success:function(response){
+                    if(response=="success"){
+                        document.getElementById("divMsg").innerHTML="Added to Cart";
+                        $('#divCartMsg').toast('show');
+                    }
+                    else{
+                        alert(response);
+                    }
+                }
+            });
+        }
+        function addToWishList(){
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            $.ajax({
+                url: "{% url 'addToWishList' %}",
+                headers: { 'X-CSRFToken': csrftoken },
+                type: "POST",
+                datatype: 'html',
+                data:{
+                    'book': {{book.id}},
+                },
+                success:function(response){
+                    if(response=="success"){
+                        document.getElementById("divMsg").innerHTML="Added to WishList";
+                        $('#divCartMsg').toast('show');
+                    }
+                    else{
+                        alert(response);
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}

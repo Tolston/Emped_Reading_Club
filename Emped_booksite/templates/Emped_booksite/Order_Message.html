@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <div class="border border-success m-lg-5 m-md-3 m-2 p-lg-3 p-md-3 p-1">
+        <h1 class="text-success text-center font-weight-bold" style="font-size:4.5vmin">Thank you for Ordering!!! Enjoy Reading:)</h1>
+        <div class="container-fluid position-relative my-2 py-3 mr-5  ">
+            <div class="px-lg-5 px-md-5 px-0 pt-2 font-weight-bold" style="font-size:3.5vmin;">Your order details</div>
+            <hr class="outline-saffron">
+            <div class="row container-fluid py-2">
+                <div class="col-lg-5 col-md-5 col-5"></div>
+                <div class="col-lg-2 col-md-2 col-2 ">
+                    <div class="row">
+                        <span class="font-weight-bold" style="font-size:2.5vmin;">Order No</span>
+                    </div >
+                </div>
+                <div class="col-lg-3 col-md-3 col-3">
+                    <div class="row">
+                        <span class="font-weight-bold" style="font-size:2.5vmin;">Shipping Address</span>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-2">
+                    <div class="row">
+                        <span class="font-weight-bold" style="font-size:2.5vmin;">Rented Date</span>
+                    </div>
+                </div>
+            </div>
+            {% for order in orders %}
+                <div class="row container-fluid py-2">
+                    <div class="col-lg-2 col-md-2 col-3 ">
+                        <img src="{{order.Book.Image.url}}" class="img-fluid" style="width:14vmin; height:17vmin"/>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-2">
+                        <div class="row">
+                            <a class="cart_book_title text-sm text-dark font-weight-bold" style="font-size:2.2vmin;">{{order.Book.Name}}</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-2">
+                        <div class="row ">
+                            <div style="font-size:2vmin;">#{{order.id}}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-3">
+                        <div class="row">
+                            <div style="font-size:2vmin;">{{order.CustomerAddress.DoorNo}},{{order.CustomerAddress.Address}},</div>
+                            <div style="font-size:2vmin;">{{order.CustomerAddress.LandMark}},</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-2">
+                        <div class="row">
+                            <div style="font-size:2vmin;">{{order.StartDate}}</div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <hr class="outline-saffron">
+            <div class="row container-fluid py-2 font-weight-bold flex justify-content-center" style="font-size:2vmin;">
+                The return books visit &nbsp;<a href="{% url 'profile-page' %}" class="saffron-link" style="text-decoration: underline;">myprofile page</a>. Happy Reading!!!.
+            </div>
+            <div class="row container-fluid py-2 flex justify-content-center">
+                <a href="{% url 'index-page' %}" class="btn btn-md btn-saffron">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
